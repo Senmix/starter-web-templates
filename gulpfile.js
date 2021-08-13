@@ -1,5 +1,6 @@
 //let replace = require('gulp-replace'); //.pipe(replace('bar', 'foo'))
-const { src, dest, watch, series, parallel } = require("gulp");
+const { src, dest } = require("gulp");
+const gulp = require("gulp");
 const autoprefixer = require("gulp-autoprefixer"),
     babel = require("gulp-babel"),
     browsersync = require("browser-sync").create(),
@@ -30,43 +31,43 @@ const src_folder = "#src";
 
 let pathes = {
     build: {
-        html: path.resolve(project_name),
-        js: path.resolve(project_name, "js"),
-        css: path.resolve(project_name, "css"),
-        images: path.resolve(project_name, "img"),
-        fonts: path.resolve(project_name, "fonts"),
-        json: path.resolve(project_name, "json"),
+        html: project_name + "/",
+        js: project_name + "/js/",
+        css: project_name + "/css/",
+        images: project_name + "/img/",
+        fonts: project_name + "/fonts/",
+        json: project_name + "/json/",
     },
     src: {
-        favicon: path.resolve(src_folder, "img", "favicon.{jpg,png,svg,gif,ico,webp}"),
-        html: [path.resolve(src_folder, "**", "*.html"), "!" + path.resolve(src_folder, "_*.html")],
-        js: [path.resolve(src_folder, "js", "app.js"), path.resolve(src_folder, "js", "vendors.js")],
-        css: path.resolve(src_folder, "scss", "style.scss"),
-        images: [
-            path.resolve(src_folder, "img", "**", "*.{jpg,jpeg,png,svg,gif,ico,webp}"),
-            path.resolve("!**", "favicon.*"),
-        ],
-        fonts: path.resolve(src_folder, "fonts*.ttf"),
-        json: path.resolve(src_folder, "json", "**", "*.*"),
+        favicon: src_folder + "/img/favicon.{jpg,png,svg,gif,ico,webp}",
+        html: [src_folder + "/**/*.html", "!" + src_folder + "/_*.html"],
+        js: [src_folder + "/js/app.js", src_folder + "/js/vendors.js"],
+        css: src_folder + "/scss/style.scss",
+        images: [src_folder + "/img/**/*.{jpg,jpeg,png,svg,gif,ico,webp}", "!**/favicon.*"],
+        fonts: src_folder + "/fonts/*.ttf",
+        json: src_folder + "/json/**/*.*",
     },
     watch: {
-        html: path.resolve(src_folder, "**", "*.html"),
-        js: path.resolve(src_folder, "**", "*.js"),
-        css: path.resolve(src_folder, "scss", "**", "*.scss"),
-        images: path.resolve(src_folder, "img", "**", "*.{jpg,jpeg,png,svg,gif,ico,webp}"),
-        json: path.resolve(src_folder, "json", "**", "*.*"),
+        html: src_folder + "/**/*.html",
+        js: src_folder + "/**/*.js",
+        css: src_folder + "/scss/**/*.scss",
+        images: src_folder + "/img/**/*.{jpg,jpeg,png,svg,gif,ico,webp}",
+        json: src_folder + "/json/**/*.*",
     },
-    clean: project_name,
+    clean: "./" + project_name + "/",
 };
+
+console.log(pathes);
 
 // Пишем папки которые нужно копировать через запятую
 let foldersArray = ["videos"]; // 'videos', 'files' ...
 function copyFolders() {
     foldersArray.forEach((folder) => {
-        src(path.resolve(src_folder, folder, "**", "*.*"), {})
-            .pipe(newer(path.resolve(project_name, folder)))
-            .pipe(dest(path.resolve(project_name, folder)));
+        src(src_folder + "/" + folder + "/**/*.*", {})
+            .pipe(newer(project_name + "/" + folder + "/"))
+            .pipe(dest(project_name + "/" + folder + "/"));
     });
+
     return src(pathes.src.html).pipe(browsersync.stream());
 }
 
@@ -122,10 +123,10 @@ function favicon() {
 }
 
 function fonts_otf() {
-    return src(path.resolve(src_folder, "fonts", "*.otf"))
+    return src("./" + src_folder + "/fonts/*.otf")
         .pipe(plumber())
         .pipe(fonter({ formats: ["ttf"] }))
-        .pipe(dest(path.resolve(src_folder, "fonts")));
+        .pipe(dest("./" + src_folder + "/fonts/"));
 }
 
 function fonts() {
@@ -134,9 +135,9 @@ function fonts() {
 }
 
 function fontstyle() {
-    let file_content = fs.readFileSync(path.resolve(src_folder, "scss", "fonts.scss"));
+    let file_content = fs.readFileSync(src_folder + "/scss/fonts.scss");
     if (file_content == "") {
-        fs.writeFile(path.resolve(src_folder, "scss", "fonts.scss"), "", cb);
+        fs.writeFile(src_folder + "/scss/fonts.scss", "", cb);
         fs.readdir(pathes.build.fonts, (err, items) => {
             if (items) {
                 let c_fontname;
@@ -145,7 +146,7 @@ function fontstyle() {
                     fontname = fontname[0];
                     if (c_fontname != fontname) {
                         fs.appendFile(
-                            path.resolve(src_folder, "scss", "fonts.scss"),
+                            src_folder + "/scss/fonts.scss",
                             `@include font("${fontname}", "${fontname}", "400", "normal");\r\n`,
                             cb
                         );
@@ -158,8 +159,6 @@ function fontstyle() {
     return src(pathes.src.html).pipe(browsersync.stream());
 }
 
-function infofile() {}
-
 function cb() {}
 
 function clean() {
@@ -167,11 +166,11 @@ function clean() {
 }
 
 function watchFiles() {
-    watch([pathes.watch.html], html);
-    watch([pathes.watch.css], css);
-    watch([pathes.watch.js], js);
-    watch([pathes.watch.json], json);
-    watch([pathes.watch.images], images);
+    gulp.watch([pathes.watch.html], html);
+    gulp.watch([pathes.watch.css], css);
+    gulp.watch([pathes.watch.js], js);
+    gulp.watch([pathes.watch.json], json);
+    gulp.watch([pathes.watch.images], images);
 }
 
 function cssBuild() {
@@ -189,10 +188,10 @@ function cssBuild() {
 }
 
 function jsBuild() {
-    let appPath = path.resolve(pathes.build.js, "app.min.js");
-    let vendorsPath = path.resolve(pathes.build.js, "vendors.min.js");
-    del(appPath);
-    del(vendorsPath);
+    console.log(pathes.build.js + "app.min.js");
+    console.log(pathes.build.js + "vendo.min.js");
+    del(pathes.build.js + "app.min.js");
+    del(pathes.build.js + "vendors.min.js");
     return src(pathes.src.js, {})
         .pipe(plumber())
         .pipe(include())
@@ -263,10 +262,10 @@ function htmlBuild() {
         .pipe(browsersync.stream());
 }
 
-let fontsBuild = series(fonts_otf, fonts, fontstyle);
-let buildDev = series(clean, parallel(fontsBuild, copyFolders, json, html, css, js, favicon, images));
-let watchDev = series(buildDev, parallel(watchFiles, browserSync));
-let build = series(clean, parallel(htmlBuild, cssBuild, jsBuild, imagesBuild));
+let fontsBuild = gulp.series(fonts_otf, fonts, fontstyle);
+let buildDev = gulp.series(clean, gulp.parallel(fontsBuild, copyFolders, json, html, css, js, favicon, images));
+let watchDev = gulp.series(buildDev, gulp.parallel(watchFiles, browserSync));
+let build = gulp.series(clean, gulp.parallel(htmlBuild, cssBuild, jsBuild, imagesBuild));
 
 exports.copy = copyFolders;
 exports.fonts = fontsBuild;
