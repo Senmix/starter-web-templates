@@ -205,7 +205,7 @@ function imagesBuild() {
 let fontsBuild = gulp.series(fonts_otf, fonts, fontstyle);
 let buildDev = gulp.series(clean, gulp.parallel(fontsBuild, copyFolders, html, css, js, images));
 let watchDev = gulp.series(buildDev, gulp.parallel(watchFiles, browserSync));
-let build = gulp.series(clean, gulp.parallel(htmlBuild, cssBuild, jsBuild, imagesBuild));
+let build = gulp.series(clean, gulp.parallel(htmlBuild, cssBuild, jsBuild, imagesBuild, fontsBuild));
 
 exports.fonts = fontsBuild;
 exports.build = build;
