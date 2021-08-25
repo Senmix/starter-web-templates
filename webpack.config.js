@@ -1,4 +1,6 @@
 // const path = require("path");
+process.env.BABEL_ENV = "development";
+process.env.NODE_ENV = "development";
 
 module.exports = {
     entry: "./src/js/index.js",
@@ -13,7 +15,12 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                use: ["babel-loader"],
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["react-app"],
+                    },
+                },
             },
         ],
     },
