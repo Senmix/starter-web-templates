@@ -1,7 +1,7 @@
 {
-    "name": "gulp-template-es6",
+    "name": "gulp-template-webpack-react",
     "version": "1.0.0",
-    "description": "gulp template with es6 modeules",
+    "description": "gulp template webpack + react",
     "engines": {
         "node": ">=14.17.4",
         "npm": ">=6.14.14"
@@ -12,14 +12,25 @@
     },
     "author": "Mixail",
     "license": "ISC",
-    "dependencies": {},
+    "babel": {
+        "presets": [
+            "@babel/preset-env",
+            "@babel/preset-react"
+        ]
+    },
+    "dependencies": {
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
     "devDependencies": {
         "@babel/core": "^7.15.0",
+        "@babel/preset-env": "^7.15.0",
+        "@babel/preset-react": "^7.14.5",
+        "babel-loader": "^8.2.2",
         "browser-sync": "^2.27.5",
         "del": "^6.0.0",
         "gulp": "^4.0.2",
         "gulp-autoprefixer": "^8.0.0",
-        "gulp-better-rollup": "^4.0.1",
         "gulp-clean-css": "^4.3.0",
         "gulp-file-include": "^2.3.0",
         "gulp-fonter": ">=0.3.0",
@@ -34,11 +45,10 @@
         "gulp-ttf2woff2": "^4.0.1",
         "gulp-uglify-es": "^3.0.0",
         "gulp-watch": "^5.0.1",
-        "rollup": "^2.56.2",
-        "rollup-plugin-babel": "^4.4.0",
-        "rollup-plugin-commonjs": "^10.1.0",
-        "rollup-plugin-node-resolve": "^5.2.0",
         "sass": "1.37.5",
-        "transform-runtime": "^0.0.0"
+        "transform-runtime": "^0.0.0",
+        "webpack": "^5.51.1",
+        "webpack-cli": "^4.8.0",
+        "webpack-stream": "^6.1.2"
     }
 }
