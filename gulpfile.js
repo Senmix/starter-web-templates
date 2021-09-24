@@ -28,8 +28,8 @@ const directories = {
         html: "./dist/",
         js: "./dist/js/",
         css: "./dist/css/",
-        images: "./img/",
-        fonts: "./fonts/",
+        images: "./dist/img/",
+        fonts: "./dist/fonts/",
     },
     src: {
         html: ["./src/**/*.html", "!" + "./src/_*.html"],
@@ -106,7 +106,7 @@ function fontstyle() {
 
         let file_content = fs.readFileSync(filepath);
         if (file_content == "") {
-            fs.writeFile(filepath, "", () => {});
+            fs.writeFile(filepath, "", () => { });
             fs.readdir(directories.build.fonts, (err, items) => {
                 if (items) {
                     let c_fontname;
@@ -117,7 +117,7 @@ function fontstyle() {
                             fs.appendFile(
                                 filepath,
                                 `@include font("${fontname}", "${fontname}", "400", "normal");\r\n`,
-                                () => {}
+                                () => { }
                             );
                         }
                         c_fontname = fontname;
